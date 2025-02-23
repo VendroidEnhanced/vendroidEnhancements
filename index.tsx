@@ -10,6 +10,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { Alerts, Forms, Text } from "@webpack/common";
 
 import myself from ".";
+import { UpdaterTab } from "./components/UpdaterTab";
 import { SettingsTab } from "./settings/components/SettingsTab";
 import { EQUICORD_SUPPORT_ID, isDev, VENCORD_SUPPORT_ID } from "./utils";
 
@@ -49,6 +50,12 @@ export default definePlugin({
     ],
     start() {
         (Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
+            section: "VDEUpdater",
+            label: "Updater",
+            element: wrapTab(UpdaterTab, "Updater"),
+            className: "vc-vdenhanced-updater"
+        }));
+        (Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
             section: "VDESettings",
             label: "VendroidEnhanced Settings",
             element: wrapTab(SettingsTab, "Vendroid Settings"),
@@ -57,6 +64,7 @@ export default definePlugin({
 
         // Sidebar showing chat fix
         // FIXME: possibly turn this into a patch. this is needed as discord uses !important on their width
+        if (window.VencordMobileNative.getPref("bool", "desktopMode", false)) return;
         const sidebarObserver = new MutationObserver(() => {
             try {
                 document.querySelector("[class^='sidebar_']")!.setAttribute("style", "width: 100% !important;");
