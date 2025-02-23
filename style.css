@@ -1,0 +1,19 @@
+.vde-close-button {
+  margin-left: auto;
+}
+
+.vde-dev-options {
+  margin-top: 20px;
+}
+
+.vde-button-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.vde-icon-preview {
+  width: 130px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
