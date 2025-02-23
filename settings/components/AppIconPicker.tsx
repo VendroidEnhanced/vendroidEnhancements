@@ -5,7 +5,7 @@ import { Margins } from "@utils/margins";
 import { Alerts, Button, Forms, Toasts } from "@webpack/common";
 import { cl } from "userplugins/vendroidEnhancements/utils";
 
-const AppIconButton = ({ id, name, url, author }) => <Button color={Button.Colors.TRANSPARENT} onClick={() => {
+const AppIconButton = ({ id, name, url, author }: { id: string; name: string; url: string; author?: { url: string; name: string; }; }) => <Button color={Button.Colors.TRANSPARENT} onClick={() => {
     Alerts.show({
         title: "Change app icon",
         body: <>
