@@ -11,7 +11,7 @@ export function SelectSetting({ id, setting }: {
 }) {
     if(setting.type !== "select") throw new Error("Invalid setting type");
     console.log("val", setting.defaultValue);
-    const [value, setValue] = useState(window.VencordMobileNative.getPref("string", id, "h")); // selects are still strings underneath
+    const [value, setValue] = useState(window.VencordMobileNative.getPref("string", id, setting.defaultValue)); // selects are still strings underneath
 
     return (
         <>
