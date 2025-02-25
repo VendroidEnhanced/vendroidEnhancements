@@ -10,7 +10,7 @@ export function ToggleSetting({ id, setting }: {
 }) {
     if(setting.type !== "toggle") throw new Error("Invalid setting type");
 
-    const [value, setValue] = useState(window.VencordMobileNative.getPref("bool", id, setting.defaultValue ? "true" : "false"));
+    const [value, setValue] = useState(window.VencordMobileNative.getBool(id, setting.defaultValue));
 
     return (
         <Switch

@@ -11,7 +11,7 @@ export function StringSetting({ id, setting }: {
 }) {
     if(setting.type !== "string") throw new Error("Invalid setting type");
 
-    const [value, setValue] = useState(window.VencordMobileNative.getPref("string", id, setting.defaultValue));
+    const [value, setValue] = useState(window.VencordMobileNative.getString(id, setting.defaultValue));
 
     return (
         <>
