@@ -1,6 +1,6 @@
 /* eslint-disable simple-header/header */
 
-import "./style.css";
+import "./style.css?managed";
 
 import { definePluginSettings } from "@api/Settings";
 import { Link } from "@components/Link";
