@@ -27,7 +27,7 @@ export function SelectSetting({ id, setting }: {
                 isSelected={v => v === value}
                 select={v => {
                     setValue(v);
-                    window.VencordMobileNative.setPref("string", id, v);
+                    window.VencordMobileNative.setString(id, v);
                 }}
                 serialize={String}
             />
