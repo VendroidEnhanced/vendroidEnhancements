@@ -18,7 +18,7 @@ export function ToggleSetting({ id, setting }: {
             value={value}
             onChange={v => {
                 setValue(v);
-                window.VencordMobileNative.setPref("bool", id, v);
+                window.VencordMobileNative.setBool(id, v);
             }}
         >
             {setting.label}

@@ -21,7 +21,7 @@ export function StringSetting({ id, setting }: {
                 placeholder={setting.placeholder}
                 onChange={v => {
                     setValue(v);
-                    window.VencordMobileNative.setPref("string", id, v);
+                    window.VencordMobileNative.setString(id, v);
                 }}
             />
             <Divider />
