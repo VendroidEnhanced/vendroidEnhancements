@@ -11,7 +11,7 @@ export function UpdaterTab() {
             <Card className={classes("vc-settings-card", "info-card")}>
                 <Flex flexDirection="column">
                     <Text style={{ fontWeight: "bold", marginBottom: "3px" }}>App updates</Text>
-                    <Text>Currently, VendroidEnhanced update checking is {window.VencordMobileNative.getPref("bool", "checkVDEUpdates", true) ? "enabled" : "disabled"}. You can still check for updates using the button below.</Text>
+                    <Text>Currently, VendroidEnhanced update checking is {window.VencordMobileNative.getBool("checkVDEUpdates", true) ? "enabled" : "disabled"}. You can still check for updates using the button below.</Text>
                     <Button
                         color={Button.Colors.TRANSPARENT}
                         onClick={() => { window.VencordMobileNative.updateVendroid(); }}>
