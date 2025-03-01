@@ -134,7 +134,7 @@ export default definePlugin({
 				transform: "scale(0.9)", // The image is a bit too big compared to default badges
 			},
 		},
-		shouldShow: ({ userId }) => isDev(userId),
+		shouldShow: ({ userId }) => contributors.includes(userId),
 		link: "https://github.com/nin0-dev/VendroidEnhanced",
 	},
 	flux: {
