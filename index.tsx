@@ -69,7 +69,7 @@ export default definePlugin({
             try {
                 document.querySelector("[class^='sidebar_']")!.setAttribute("style", "width: 100% !important;");
             }
-            catch { }
+            catch(e) { console.error(e) }
         });
         sidebarObserver.observe(document.querySelector("[class^='content']")!, { childList: true, subtree: true });
     },
