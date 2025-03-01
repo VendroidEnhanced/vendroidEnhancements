@@ -94,7 +94,7 @@ export default definePlugin({
     },
     userProfileBadge: {
         description: "VendroidEnhanced Contributor",
-        image: "https://raw.githubusercontent.com/VendroidEnhanced/UpdateTracker/main/logo.png",
+        image: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/f8d6485aadde73599eca60c53ddf8a5769ec1293/ic_launcher-playstore.png",
         position: 0,
         props: {
             style: {
