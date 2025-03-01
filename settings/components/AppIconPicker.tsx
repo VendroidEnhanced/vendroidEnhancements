@@ -38,22 +38,22 @@ const icons: {
     }; url: string;
 }[] = [
         {
-            id: "default",
+            id: "Main",
             name: "Default",
             url: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/refs/heads/main/ic_launcher-playstore.png"
         },
         {
-            id: "discord",
+            id: "Discord",
             name: "Discord colors",
             url: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/refs/heads/main/ic_launcher_discordD-playstore.png"
         },
         {
-            id: "jolly",
+            id: "Jolly",
             name: "Christmas",
             url: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/refs/heads/main/ic_launcher_jolly-playstore.png"
         },
         {
-            id: "retro",
+            id: "Retro",
             name: "Retro",
             url: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/refs/heads/main/ic_launcher_retro-playstore.png",
             author: {
