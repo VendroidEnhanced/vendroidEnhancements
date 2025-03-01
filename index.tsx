@@ -65,6 +65,7 @@ export default definePlugin({
         // Sidebar showing chat fix
         // FIXME: possibly turn this into a patch. this is needed as discord uses !important on their width
         if (window.VencordMobileNative.getBool("desktopMode", false)) return;
+        console.log("hi")
         const sidebarObserver = new MutationObserver(() => {
             try {
                 document.querySelector("[class^='sidebar_']")!.setAttribute("style", "width: 100% !important;");
