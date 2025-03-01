@@ -32,88 +32,118 @@ function showNoSupportModal(name: string = "Vencord") {
     });
 }
 
+export let contributors = [];
 
 export default definePlugin({
-    name: "VendroidEnhancements",
-    description: "Makes Vendroid usable.",
-    required: true,
-    authors: [], // no authors because insane
-    dependencies: ["MessageEventsAPI"],
-    patches: [
-        {
-            find: "chat input type must be set",
-            replacement: [{
-                match: /(\i.\i.useSetting\(\))&&!\(0,\i.isAndroidWeb\)\(\)/,
-                replace: "$1"
-            }]
-        }
-    ],
-    start() {
-        (Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
-            section: "VDEUpdater",
-            label: "Updater",
-            element: wrapTab(UpdaterTab, "Updater"),
-            className: "vc-vdenhanced-updater"
-        }));
-        (Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
-            section: "VDESettings",
-            label: "VendroidEnhanced Settings",
-            element: wrapTab(SettingsTab, "Vendroid Settings"),
-            className: "vc-vdenhanced-settings"
-        }));
+	name: "VendroidEnhancements",
+	description: "Makes Vendroid usable.",
+	required: true,
+	authors: [], // no authors because insane
+	dependencies: ["MessageEventsAPI"],
+	patches: [
+		{
+			find: "chat input type must be set",
+			replacement: [
+				{
+					match: /(\i.\i.useSetting\(\))&&!\(0,\i.isAndroidWeb\)\(\)/,
+					replace: "$1",
+				},
+			],
+		},
+	],
+	prepareSettings() {
+		(Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
+			section: "VDEUpdater",
+			label: "Updater",
+			element: wrapTab(UpdaterTab, "Updater"),
+			className: "vc-vdenhanced-updater",
+		}));
+		(Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
+			section: "VDESettings",
+			label: "VendroidEnhanced Settings",
+			element: wrapTab(SettingsTab, "Vendroid Settings"),
+			className: "vc-vdenhanced-settings",
+		}));
+	},
+	async start() {
+		this.prepareSettings();
 
-        // Sidebar showing chat fix
-        // FIXME: possibly turn this into a patch. this is needed as discord uses !important on their width
-        if (window.VencordMobileNative.getBool("desktopMode", false)) return;
-        setTimeout(() => {
-            const sidebarObserver = new MutationObserver(() => {
-                try {
-                    document.querySelector("[class^='sidebar_']")!.setAttribute("style", "width: 100% !important;");
-                }
-                catch(e) { console.error(e) }
-            });
-            sidebarObserver.observe(document.querySelector("[class^='content']")!, { childList: true, subtree: true });
-        }, 1000)
-    },
-    settings: definePluginSettings({
-        allowSupportMessageSending: {
-            description: "Allow sending messages in the Vencord support channel. DO NOT ASK FOR SUPPORT IN IT FOR VENDROIDENHANCED ISSUES!!",
-            default: false,
-            type: OptionType.BOOLEAN
-        }
-    }),
-    onBeforeMessageSend(c, msg) {
-        if (c === VENCORD_SUPPORT_ID && !this.settings.store.allowSupportMessageSending) {
-            showNoSupportModal("Vencord");
-            msg.content = "";
-        }
-        if(c === EQUICORD_SUPPORT_ID && !this.settings.store.allowSupportMessageSending) {
-            showNoSupportModal("Equicord");
-            msg.content = "";
-        }
-    },
-    userProfileBadge: {
-        description: "VendroidEnhanced Contributor",
-        image: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/f8d6485aadde73599eca60c53ddf8a5769ec1293/ic_launcher-playstore.png",
-        position: 0,
-        props: {
-            style: {
-                borderRadius: "50%",
-                transform: "scale(0.9)" // The image is a bit too big compared to default badges
-            }
-        },
-        shouldShow: ({ userId }) => isDev(userId),
-        link: "https://github.com/VendroidEnhanced/Vendroid"
-    },
-    flux: {
-        async CHANNEL_SELECT({ channelId }) {
-            if (myself.settings.store.allowSupportMessageSending) return;
-            switch (channelId) {
-                case VENCORD_SUPPORT_ID: {
-                    showNoSupportModal();
-                }
-            }
-        }
-    }
+		// Populate badges
+		try {
+			contributors = (
+				await fetch("https://vendroid.nin0.dev/api/contributors")
+			).json().contributors;
+		} catch {}
+
+		// Sidebar showing chat fix
+		// FIXME: possibly turn this into a patch. this is needed as discord uses !important on their width
+		if (!window.VencordMobileNative.getBool("desktopMode", false)) {
+			setTimeout(() => {
+				const sidebarObserver = new MutationObserver(() => {
+					try {
+						document
+							.querySelector("[class^='sidebar_']")!
+							.setAttribute("style", "width: 100% !important;");
+					} catch (e) {
+						console.error(e);
+					}
+				});
+				sidebarObserver.observe(
+					document.querySelector("[class^='content']")!,
+					{
+						childList: true,
+						subtree: true,
+					}
+				);
+			}, 1000);
+		}
+	},
+	settings: definePluginSettings({
+		allowSupportMessageSending: {
+			description:
+				"Allow sending messages in the Vencord support channel. DO NOT ASK FOR SUPPORT IN IT FOR VENDROIDENHANCED ISSUES!!",
+			default: false,
+			type: OptionType.BOOLEAN,
+		},
+	}),
+	onBeforeMessageSend(c, msg) {
+		if (
+			c === VENCORD_SUPPORT_ID &&
+			!this.settings.store.allowSupportMessageSending
+		) {
+			showNoSupportModal("Vencord");
+			msg.content = "";
+		}
+		if (
+			c === EQUICORD_SUPPORT_ID &&
+			!this.settings.store.allowSupportMessageSending
+		) {
+			showNoSupportModal("Equicord");
+			msg.content = "";
+		}
+	},
+	userProfileBadge: {
+		description: "VendroidEnhanced Contributor",
+		image: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/f8d6485aadde73599eca60c53ddf8a5769ec1293/ic_launcher-playstore.png",
+		position: 0,
+		props: {
+			style: {
+				borderRadius: "50%",
+				transform: "scale(0.9)", // The image is a bit too big compared to default badges
+			},
+		},
+		shouldShow: ({ userId }) => isDev(userId),
+		link: "https://github.com/nin0-dev/VendroidEnhanced",
+	},
+	flux: {
+		async CHANNEL_SELECT({ channelId }) {
+			if (myself.settings.store.allowSupportMessageSending) return;
+			switch (channelId) {
+				case VENCORD_SUPPORT_ID: {
+					showNoSupportModal();
+				}
+			}
+		},
+	},
 });
 
