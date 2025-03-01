@@ -71,7 +71,9 @@ export default definePlugin({
 		// Populate badges
 		try {
 			contributors = (
-				await fetch("https://vendroid.nin0.dev/api/contributors")
+				await fetch(
+					"https://vendroid-staging.nin0.dev/api/contributors"
+				)
 			).json().contributors;
 		} catch {}
 
