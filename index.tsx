@@ -101,8 +101,8 @@ export default definePlugin({
 		}
 
 		// Monkeypatch quickcss opening :heart:
-		VencordNative.quickCss.openEditor = () => {
-			window.VencordMobileNative.openQuickCss();
+		VencordNative.quickCss.openEditor = async () => {
+			window.VencordMobileNative.openQuickCss((await VencordNative.quickCss.get()));
 		};
 	},
 	settings: definePluginSettings({
