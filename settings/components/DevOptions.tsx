@@ -14,7 +14,7 @@ const devOptions: {
     allowRemoteDebugging: {
         label: "Allow remote debugging",
         type: "toggle",
-        description: "Expose WebView to remote Chrome DevTools",
+        description: "Expose WebView to remote Chrome DevTools. You will be able to inspect the WebView on a browser using chrome://inspect",
         defaultValue: false
     },
     vencordLocation: {
