@@ -99,6 +99,11 @@ export default definePlugin({
 				);
 			}, 1000);
 		}
+
+		// Monkeypatch quickcss opening :heart:
+		VencordNative.quickCss = () => {
+			window.VencordMobileNative.openQuickCss();
+		};
 	},
 	settings: definePluginSettings({
 		allowSupportMessageSending: {
