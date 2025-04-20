@@ -1,6 +1,6 @@
 /* eslint-disable simple-header/header */
 
-import "./style.css?managed";
+import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { Link } from "@components/Link";
@@ -12,7 +12,7 @@ import { Alerts, Forms, Text } from "@webpack/common";
 import myself from ".";
 import { UpdaterTab } from "./components/UpdaterTab";
 import { SettingsTab } from "./settings/components/SettingsTab";
-import { EQUICORD_SUPPORT_ID, isDev, VENCORD_SUPPORT_ID } from "./utils";
+import { EQUICORD_SUPPORT_ID, VENCORD_SUPPORT_ID } from "./utils";
 
 function showNoSupportModal(name: string = "Vencord") {
     Alerts.show({
@@ -35,122 +35,111 @@ function showNoSupportModal(name: string = "Vencord") {
 export let contributors = [];
 
 export default definePlugin({
-	name: "VendroidEnhancements",
-	description: "Makes Vendroid usable.",
-	required: true,
-	authors: [], // no authors because insane
-	dependencies: ["MessageEventsAPI"],
-	patches: [
-		{
-			find: "chat input type must be set",
-			replacement: [
-				{
-					match: /(\i.\i.useSetting\(\))&&!\(0,\i.isAndroidWeb\)\(\)/,
-					replace: "$1",
-				},
-			],
-		},
-	],
-	prepareSettings() {
-		(Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
-			section: "VDEUpdater",
-			label: "Updater",
-			element: wrapTab(UpdaterTab, "Updater"),
-			className: "vc-vdenhanced-updater",
-		}));
-		(Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
-			section: "VDESettings",
-			label: "VendroidEnhanced Settings",
-			element: wrapTab(SettingsTab, "Vendroid Settings"),
-			className: "vc-vdenhanced-settings",
-		}));
-	},
-	async start() {
-		this.prepareSettings();
+    name: "VendroidEnhancements",
+    description: "Makes Vendroid usable.",
+    required: true,
+    authors: [], // no authors because insane
+    dependencies: ["MessageEventsAPI"],
+    patches: [
+        {
+            find: "chat input type must be set",
+            replacement: [
+                {
+                    match: /(\i.\i.useSetting\(\))&&!\(0,\i.isAndroidWeb\)\(\)/,
+                    replace: "$1",
+                },
+            ],
+        },
+    ],
+    prepareSettings() {
+        (Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
+            section: "VDEUpdater",
+            label: "Updater",
+            element: wrapTab(UpdaterTab, "Updater"),
+            className: "vc-vdenhanced-updater",
+        }));
+        (Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
+            section: "VDESettings",
+            label: "VendroidEnhanced Settings",
+            element: wrapTab(SettingsTab, "Vendroid Settings"),
+            className: "vc-vdenhanced-settings",
+        }));
+    },
+    async start() {
+        this.prepareSettings();
 
-		// Populate badges
-		try {
-			contributors = (
-				await fetch(
-					"https://vendroid-staging.nin0.dev/api/contributors"
-				)
-			).json().contributors;
-		} catch {}
+        // Populate badges
+        try {
+            contributors = (await (
+                await fetch(
+                    "https://vendroid-staging.nin0.dev/api/contributors"
+                )
+            ).json()).contributors;
+        } catch { }
 
-		// Sidebar showing chat fix
-		// FIXME: possibly turn this into a patch. this is needed as discord uses !important on their width
-		if (!window.VencordMobileNative.getBool("desktopMode", false)) {
-			setTimeout(() => {
-				const sidebarObserver = new MutationObserver(() => {
-					try {
-						document
-							.querySelector("[class^='sidebar_']")!
-							.setAttribute("style", "width: 100% !important;");
-					} catch (e) {
-						console.error(e);
-					}
-				});
-				sidebarObserver.observe(
-					document.querySelector("[class^='content']")!,
-					{
-						childList: true,
-						subtree: true,
-					}
-				);
-			}, 1000);
-		}
+        if (!window.VencordMobileNative.getBool("desktopMode", false)) {
+            setInterval(() => {
+                const screenWidth = screen.availWidth;
 
-		// Monkeypatch quickcss opening :heart:
-		VencordNative.quickCss.openEditor = async () => {
-			window.VencordMobileNative.openQuickCss((await VencordNative.quickCss.get()));
-		};
-	},
-	settings: definePluginSettings({
-		allowSupportMessageSending: {
-			description:
-				"Allow sending messages in the Vencord support channel. DO NOT ASK FOR SUPPORT IN IT FOR VENDROIDENHANCED ISSUES!!",
-			default: false,
-			type: OptionType.BOOLEAN,
-		},
-	}),
-	onBeforeMessageSend(c, msg) {
-		if (
-			c === VENCORD_SUPPORT_ID &&
-			!this.settings.store.allowSupportMessageSending
-		) {
-			showNoSupportModal("Vencord");
-			msg.content = "";
-		}
-		if (
-			c === EQUICORD_SUPPORT_ID &&
-			!this.settings.store.allowSupportMessageSending
-		) {
-			showNoSupportModal("Equicord");
-			msg.content = "";
-		}
-	},
-	userProfileBadge: {
-		description: "VendroidEnhanced Contributor",
-		image: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/f8d6485aadde73599eca60c53ddf8a5769ec1293/ic_launcher-playstore.png",
-		position: 0,
-		props: {
-			style: {
-				borderRadius: "50%",
-				transform: "scale(0.9)", // The image is a bit too big compared to default badges
-			},
-		},
-		shouldShow: ({ userId }) => contributors.map(c => c.id || 0).includes(userId),
-		link: "https://github.com/nin0-dev/VendroidEnhanced",
-	},
-	flux: {
-		async CHANNEL_SELECT({ channelId }) {
-			if (myself.settings.store.allowSupportMessageSending) return;
-			switch (channelId) {
-				case VENCORD_SUPPORT_ID: {
-					showNoSupportModal();
-				}
-			}
-		},
-	},
+                const style = document.querySelector("#vde-screen-width") || document.createElement("style");
+                style.setAttribute("id", "vde-screen-width");
+                style.textContent = `:root { --screen-width: ${screenWidth}px }`;
+                document.head.appendChild(style);
+            }, 1000);
+        }
+
+        // Monkeypatch quickcss opening :heart:
+        VencordNative.quickCss.openEditor = async () => {
+            window.VencordMobileNative.openQuickCss((await VencordNative.quickCss.get()));
+        };
+    },
+    settings: definePluginSettings({
+        allowSupportMessageSending: {
+            description:
+                "Allow sending messages in the Vencord support channel. DO NOT ASK FOR SUPPORT IN IT FOR VENDROIDENHANCED ISSUES!!",
+            default: false,
+            type: OptionType.BOOLEAN,
+        },
+    }),
+    onBeforeMessageSend(c, msg) {
+        if (
+            c === VENCORD_SUPPORT_ID &&
+            !this.settings.store.allowSupportMessageSending
+        ) {
+            showNoSupportModal("Vencord");
+            msg.content = "";
+        }
+        if (
+            c === EQUICORD_SUPPORT_ID &&
+            !this.settings.store.allowSupportMessageSending
+        ) {
+            showNoSupportModal("Equicord");
+            msg.content = "";
+        }
+    },
+    userProfileBadge: {
+        description: "VendroidEnhanced Contributor",
+        image: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/f8d6485aadde73599eca60c53ddf8a5769ec1293/ic_launcher-playstore.png",
+        position: 0,
+        props: {
+            style: {
+                borderRadius: "50%",
+                transform: "scale(0.9)", // The image is a bit too big compared to default badges
+            },
+        },
+        // @ts-expect-error
+        shouldShow: ({ userId }) => contributors.map(c => c.id || 0).includes(userId),
+        link: "https://github.com/nin0-dev/VendroidEnhanced",
+    },
+    flux: {
+        async CHANNEL_SELECT({ channelId }) {
+            if (myself.settings.store.allowSupportMessageSending) return;
+            switch (channelId) {
+                case VENCORD_SUPPORT_ID: {
+                    showNoSupportModal();
+                }
+            }
+        },
+    },
 });
 
