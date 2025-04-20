@@ -17,3 +17,19 @@
   border-radius: 100px;
   margin-bottom: 20px;
 }
+
+div[class^="sidebarList_"] {
+    width: calc(var(--screen-width) - 69px) !important;
+}
+
+[class^="sidebar__"] {
+    width: var(--screen-width);
+}
+
+#popout_59 {
+    position: absolute !important;
+    left: 0;
+    div[class^="headerTitle"] {
+        width: 200px;
+    }
+}
