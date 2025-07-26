@@ -3,6 +3,7 @@
 import { Link } from "@components/Link";
 import { Margins } from "@utils/margins";
 import { Alerts, Button, Forms, Toasts } from "@webpack/common";
+
 import { cl } from "../../utils";
 
 const AppIconButton = ({ id, name, url, author }: { id: string; name: string; url: string; author?: { url: string; name: string; }; }) => <Button color={Button.Colors.TRANSPARENT} onClick={() => {

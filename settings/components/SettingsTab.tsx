@@ -1,6 +1,6 @@
 /* eslint-disable simple-header/header */
 
-import { SettingsTab as STab } from "@components/VencordSettings/shared";
+import { SettingsTab as STab } from "@components/settings/tabs/BaseTab";
 import { Forms } from "@webpack/common";
 
 import { generateOptions } from "../generateOptions";

@@ -26,9 +26,11 @@ div[class^="sidebarList_"] {
     width: var(--screen-width);
 }
 
+/* stylelint-disable-next-line selector-id-pattern */
 #popout_59 {
     position: absolute !important;
     left: 0;
+    /* stylelint-disable-next-line rule-empty-line-before */
     div[class^="headerTitle"] {
         width: 200px;
     }
