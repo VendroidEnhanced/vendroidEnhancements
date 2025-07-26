@@ -4,7 +4,7 @@ import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { Link } from "@components/Link";
-import { wrapTab } from "@components/VencordSettings/shared";
+import { wrapTab } from "@components/settings/tabs/BaseTab";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
 import { Alerts, Forms, Text } from "@webpack/common";

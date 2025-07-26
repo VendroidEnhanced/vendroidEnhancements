@@ -1,7 +1,7 @@
 /* eslint-disable simple-header/header */
 
 import { Flex } from "@components/Flex";
-import { SettingsTab as STab } from "@components/VencordSettings/shared";
+import { SettingsTab as STab } from "@components/settings/tabs/BaseTab";
 import { classes } from "@utils/misc";
 import { Button, Card, Text } from "@webpack/common";
 
