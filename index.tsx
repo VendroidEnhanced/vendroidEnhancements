@@ -72,7 +72,7 @@ export default definePlugin({
         try {
             contributors = (await (
                 await fetch(
-                    "https://vendroid-staging.nin0.dev/api/contributors"
+                    "https://vendroid.nin0.dev/api/contributors"
                 )
             ).json()).contributors;
         } catch { }
