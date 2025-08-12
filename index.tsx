@@ -141,7 +141,7 @@ export default definePlugin({
                 }
                 case EQUICORD_SUPPORT_ID: {
                     // @ts-ignore
-                    if (Vencord.Api.isEquicord) showNoSupportModal();
+                    if (Vencord.Api.isEquicord) showNoSupportModal("Equicord");
                     break;
                 }
             }
