@@ -137,6 +137,12 @@ export default definePlugin({
             switch (channelId) {
                 case VENCORD_SUPPORT_ID: {
                     showNoSupportModal();
+                    break;
+                }
+                case EQUICORD_SUPPORT_ID: {
+                    // @ts-ignore
+                    if (Vencord.Api.isEquicord) showNoSupportModal();
+                    break;
                 }
             }
         },
