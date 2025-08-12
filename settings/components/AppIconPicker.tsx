@@ -61,6 +61,11 @@ const icons: {
                 name: "CrimsonFork",
                 url: "https://github.com/CrimsonFork"
             }
+        },
+        {
+            id: "TS12",
+            name: "The Life of a VDE",
+            url: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/refs/heads/main/swifties.png"
         }
     ];
 
