@@ -35,3 +35,11 @@ div[class^="sidebarList_"] {
         width: 200px;
     }
 }
+
+div[class^="prompt_"] {
+    width: 95vw;
+
+    div[class^="scrollerContent"] {
+        padding: 20px;
+    }
+}
