@@ -37,9 +37,9 @@ div[class^="sidebarList_"] {
 }
 
 div[class^="prompt_"] {
-    width: 95vw;
+    width: 95vw !important;
 
     div[class^="scrollerContent"] {
-        padding: 20px;
+        padding: 20px !important;
     }
 }
