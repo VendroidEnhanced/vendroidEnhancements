@@ -7,12 +7,21 @@ import { Link } from "@components/Link";
 import { wrapTab } from "@components/settings/tabs/BaseTab";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
+import { findByPropsLazy } from "@webpack";
 import { Alerts, Forms, Text } from "@webpack/common";
 
 import myself from ".";
 import { UpdaterTab } from "./components/UpdaterTab";
 import { SettingsTab } from "./settings/components/SettingsTab";
 import { EQUICORD_SUPPORT_ID, VENCORD_SUPPORT_ID } from "./utils";
+
+let isMembersVisible = false;
+let isSidebarVisible = true;
+
+function updatePanelsStatus() {
+    isSidebarVisible = !!document.querySelector("div[class^='sidebar']");
+    isMembersVisible = !!document.querySelector("div[class^='members_']");
+}
 
 function showNoSupportModal(name: string = "Vencord") {
     Alerts.show({
@@ -33,6 +42,8 @@ function showNoSupportModal(name: string = "Vencord") {
 }
 
 export let contributors = [];
+const ms = findByPropsLazy("toggleMembersSection");
+
 
 export default definePlugin({
     name: "VendroidEnhancements",
@@ -66,6 +77,7 @@ export default definePlugin({
         }));
     },
     async start() {
+
         this.prepareSettings();
 
         // Populate badges
@@ -87,11 +99,65 @@ export default definePlugin({
                 document.head.appendChild(style);
             }, 1000);
         }
+        setInterval(() => {
+            updatePanelsStatus();
+        }, 1000);
 
         // Monkeypatch quickcss opening :heart:
         VencordNative.quickCss.openEditor = async () => {
             window.VencordMobileNative.openQuickCss((await VencordNative.quickCss.get()));
         };
+
+        let startX: number;
+        let startY: number;
+
+
+        document.addEventListener("touchstart", event => {
+            startX = event.changedTouches[0].clientX;
+            startY = event.changedTouches[0].clientY;
+        });
+        document.addEventListener("touchend", event => {
+            if (!startX || !startY) return;
+            const endX = event.changedTouches[0].screenX;
+            const endY = event.changedTouches[0].screenY;
+
+            const isSwipeVertical = Math.abs(endY - startY) > 60;
+            if (!isSwipeVertical) {
+                if (Math.abs(endX - startX) > 60) {
+                    if (endX < startX) {
+                        // Left swipe (right to left)
+                        if (isSidebarVisible) {
+                            // @ts-expect-error
+                            NavigationRouter.transitionToGuild(SelectedGuildStore.getGuildId());
+                            isMembersVisible = false;
+                            isSidebarVisible = false;
+                        }
+                        else {
+                            if (!isMembersVisible) {
+                                ms.toggleMembersSection();
+                                isMembersVisible = true;
+                                isSidebarVisible = false;
+                            }
+                        }
+                    } else {
+                        // Right swipe (left to right)
+                        if (!isSidebarVisible) {
+                            if (!isMembersVisible) {
+                                // @ts-ignore
+                                document.querySelector("button[class^='btnHamburger__']").click();
+                                isMembersVisible = false;
+                                isSidebarVisible = true;
+                            }
+                        }
+                        if (isMembersVisible) {
+                            ms.toggleMembersSection();
+                            isMembersVisible = false;
+                            isSidebarVisible = false;
+                        }
+                    }
+                }
+            }
+        });
     },
     settings: definePluginSettings({
         allowSupportMessageSending: {

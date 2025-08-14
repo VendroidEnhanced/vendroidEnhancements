@@ -1,21 +1,21 @@
 .vde-close-button {
-  margin-left: auto;
+    margin-left: auto;
 }
 
 .vde-dev-options {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .vde-button-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
 .vde-icon-preview {
-  width: 130px;
-  border-radius: 100px;
-  margin-bottom: 20px;
+    width: 130px;
+    border-radius: 100px;
+    margin-bottom: 20px;
 }
 
 div[class^="sidebarList_"] {
@@ -30,6 +30,7 @@ div[class^="sidebarList_"] {
 #popout_59 {
     position: absolute !important;
     left: 0;
+
     /* stylelint-disable-next-line rule-empty-line-before */
     div[class^="headerTitle"] {
         width: 200px;
