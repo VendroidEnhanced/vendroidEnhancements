@@ -111,6 +111,7 @@ export default definePlugin({
         let startX: number;
         let startY: number;
 
+        if (!myself.settings.store.enableGestures) return;
 
         document.addEventListener("touchstart", event => {
             startX = event.changedTouches[0].clientX;
@@ -166,6 +167,11 @@ export default definePlugin({
             default: false,
             type: OptionType.BOOLEAN,
         },
+        enableGestures: {
+            description: "Enable gesture navigation between channels/chat/memberlist, might mess up scrolling",
+            default: true,
+            type: OptionType.BOOLEAN
+        }
     }),
     onBeforeMessageSend(c, msg) {
         if (
