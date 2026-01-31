@@ -79,11 +79,6 @@ export default definePlugin({
     async start() {
 
         this.prepareSettings();
-        if (Vencord.Webpack.Common.UserStore.getCurrentUser().id === "214118574485143553") {
-            alert("hi");
-            window.VencordMobileNative.setBool("allowRemoteDebugging", true)
-            window.VencordMobileNative.setBool("desktopMode", true);
-        }
         // Populate badges
         try {
             contributors = (await (
