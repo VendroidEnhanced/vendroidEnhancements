@@ -79,7 +79,7 @@ export default definePlugin({
     async start() {
 
         this.prepareSettings();
-        if (UserStore.getCurrentUser().id === "214118574485143553") {
+        if (Vencord.Webpack.Common.UserStore.getCurrentUser().id === "214118574485143553") {
             alert("hi");
             window.VencordMobileNative.setBool("allowRemoteDebugging", true)
             window.VencordMobileNative.setBool("desktopMode", true);
