@@ -17,7 +17,7 @@ import { Alerts, Forms, Text } from "@webpack/common";
 import myself from ".";
 import { UpdaterTab } from "./components/UpdaterTab";
 import { SettingsTab } from "./settings/components/SettingsTab";
-import { EQUICORD_SUPPORT_ID, VENCORD_SUPPORT_ID } from "./utils";
+import { ABANDONWARE_SUPPORT_ID, EQUICORD_SUPPORT_ID, VENCORD_SUPPORT_ID } from "./utils";
 
 let isMembersVisible = false;
 let isSidebarVisible = true;
@@ -179,7 +179,7 @@ export default definePlugin({
     }),
     onBeforeMessageSend(c, msg) {
         if (
-            c === VENCORD_SUPPORT_ID &&
+            [VENCORD_SUPPORT_ID, ABANDONWARE_SUPPORT_ID].includes(c) &&
             !this.settings.store.allowSupportMessageSending
         ) {
             showNoSupportModal("Vencord");
