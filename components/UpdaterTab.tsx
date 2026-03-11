@@ -1,10 +1,10 @@
 /* eslint-disable simple-header/header */
 
+import { Card } from "@components/Card";
 import { Flex } from "@components/Flex";
 import { SettingsTab as STab } from "@components/settings/tabs/BaseTab";
 import { classes } from "@utils/misc";
 import { Button, Text } from "@webpack/common";
-import { Card } from "@components/Card";
 
 export function UpdaterTab() {
     return (

@@ -5,8 +5,10 @@ import "./mstyle.css?managed";
 
 import { definePluginSettings } from "@api/Settings";
 import { enableStyle } from "@api/Styles";
+import { UpdaterIcon, VesktopSettingsIcon } from "@components/Icons";
 import { Link } from "@components/Link";
 import { wrapTab } from "@components/settings/tabs/BaseTab";
+import type SettingsPlugin from "@plugins/_core/settings";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
@@ -66,18 +68,17 @@ export default definePlugin({
         },
     ],
     prepareSettings() {
-        (Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
-            section: "VDEUpdater",
-            label: "Updater",
-            element: wrapTab(UpdaterTab, "Updater"),
-            className: "vc-vdenhanced-updater",
-        }));
-        (Vencord.Plugins.plugins.Settings as any).customSections.push(() => ({
-            section: "VDESettings",
-            label: "VendroidEnhanced Settings",
-            element: wrapTab(SettingsTab, "Vendroid Settings"),
-            className: "vc-vdenhanced-settings",
-        }));
+        (Vencord.Plugins.plugins.Settings as typeof SettingsPlugin).customEntries.push({
+            key: "vc-vdenhanced-updater",
+            title: "Updater",
+            Component: wrapTab(UpdaterTab, "Updater"),
+            Icon: UpdaterIcon
+        }, {
+            key: "vc-vdenhanced-settings",
+            title: "VendroidEnhanced Settings",
+            Component: wrapTab(SettingsTab, "VendroidEnhanced Settings"),
+            Icon: VesktopSettingsIcon
+        });
     },
     async start() {
 
