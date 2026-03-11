@@ -1,8 +1,10 @@
 /* eslint-disable simple-header/header */
 
 import "./style.css";
+import "./mstyle.css?managed";
 
 import { definePluginSettings } from "@api/Settings";
+import { enableStyle } from "@api/Styles";
 import { Link } from "@components/Link";
 import { wrapTab } from "@components/settings/tabs/BaseTab";
 import { Margins } from "@utils/margins";
@@ -43,6 +45,7 @@ function showNoSupportModal(name: string = "Vencord") {
 
 export let contributors = [];
 const ms = findByPropsLazy("toggleMembersSection");
+const isaw = findByPropsLazy("isAndroidWeb");
 
 
 export default definePlugin({
@@ -88,7 +91,8 @@ export default definePlugin({
             ).json()).contributors;
         } catch { }
 
-        if (!window.VencordMobileNative.getBool("desktopMode", false)) {
+        if (!window.VencordMobileNative.getBool("desktopMode", false) && isaw.isAndroidWeb()) {
+            enableStyle("mstyle");
             setInterval(() => {
                 const screenWidth = screen.availWidth;
 
@@ -219,4 +223,3 @@ export default definePlugin({
         },
     },
 });
-
