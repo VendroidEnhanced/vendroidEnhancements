@@ -1,6 +1,6 @@
 /* eslint-disable simple-header/header */
 
-import { Button } from "@webpack/common";
+import { Button } from "@components/Button";
 
 import { AppIconPicker } from "./components/AppIconPicker";
 import { showDevOptionsModal } from "./components/DevOptions";
@@ -87,7 +87,7 @@ export const settings: Settings = {
       component: () => (
         <>
           <Button
-            color={Button.Colors.TRANSPARENT}
+            variant="secondary"
             onClick={showDevOptionsModal}
           >
             Open developer settings

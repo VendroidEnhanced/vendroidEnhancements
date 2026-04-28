@@ -1,8 +1,7 @@
 /* eslint-disable simple-header/header */
 
-import { ErrorBoundary } from "@components/index";
+import { BaseText, ErrorBoundary } from "@components/index";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { Text } from "@webpack/common";
 
 import { cl } from "../../utils";
 import { generateOptions } from "../generateOptions";
@@ -31,9 +30,9 @@ export function showDevOptionsModal() {
             <ErrorBoundary>
                 <ModalRoot {...props} size={ModalSize.DYNAMIC} fullscreenOnMobile={true} >
                     <ModalHeader>
-                        <Text variant="heading-lg/semibold" className={cl("header")}>
+                        <BaseText size="lg" weight="semibold" className={cl("header")}>
                             Developer settings
-                        </Text>
+                        </BaseText>
                         <ModalCloseButton onClick={props.onClose} className={cl("close-button")} />
                     </ModalHeader>
                     <ModalContent>

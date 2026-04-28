@@ -36,6 +36,15 @@ export type Setting = StringSetting | SelectSetting | ToggleSetting | ComponentS
 export interface Settings {
     [key: string]: {
         [key: string]: Setting;
-    }
+    };
 }
 
+export type Author = {
+    name: string;
+    url: string;
+};
+
+export type Contributor = {
+    id: string;
+    description: string;
+};

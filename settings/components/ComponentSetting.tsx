@@ -1,19 +1,20 @@
 /* eslint-disable simple-header/header */
 
-import { Forms } from "@webpack/common";
+import { BaseText } from "@components/BaseText";
+import { Divider } from "@components/Divider";
 
+import { cl } from "../../utils";
 import { Setting } from "../types";
-import { Divider } from "./Divider";
 
 export function ComponentSetting({ setting }: {
     setting: Setting;
 }) {
-    if(setting.type !== "component") throw new Error("Invalid setting type");
+    if (setting.type !== "component") throw new Error("Invalid setting type");
 
     return (
         <>
-            <Forms.FormText style={{ fontSize: "16px", color: "var(--header-primary)", marginBottom: "8px", fontWeight: "500" }}>{setting.label}</Forms.FormText>
-            <Forms.FormText style={{ marginBottom: "10px" }} type="description">{setting.description}</Forms.FormText>
+            <BaseText tag="p" weight="medium" className={cl("component-setting-title")}>{setting.label}</BaseText>
+            <BaseText tag="p" size="sm" className={cl("component-setting-description")}>{setting.description}</BaseText>
             <setting.component />
             <Divider />
         </>

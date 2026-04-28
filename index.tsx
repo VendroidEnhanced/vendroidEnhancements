@@ -5,25 +5,31 @@ import "./mstyle.css?managed";
 
 import { definePluginSettings } from "@api/Settings";
 import { enableStyle } from "@api/Styles";
+import { BaseText } from "@components/BaseText";
 import { UpdaterIcon, VesktopSettingsIcon } from "@components/Icons";
 import { Link } from "@components/Link";
 import { wrapTab } from "@components/settings/tabs/BaseTab";
+import { Contributor } from "@equicordplugins/themeLibrary/types";
 import type SettingsPlugin from "@plugins/_core/settings";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { Alerts, Forms, Text } from "@webpack/common";
+import { Alerts } from "@webpack/common";
 
 import myself from ".";
 import { UpdaterTab } from "./components/UpdaterTab";
 import { SettingsTab } from "./settings/components/SettingsTab";
 import { ABANDONWARE_SUPPORT_ID, EQUICORD_SUPPORT_ID, VENCORD_SUPPORT_ID } from "./utils";
 
+export let contributors: Contributor[] = [];
+const ChannelSidebarActions = findByPropsLazy("toggleMembersSection");
+const PlatformUtils = findByPropsLazy("isAndroidWeb");
+
 let isMembersVisible = false;
 let isSidebarVisible = true;
 
 function updatePanelsStatus() {
-    isSidebarVisible = !!document.querySelector("div[class^='sidebar']");
+    isSidebarVisible = !!document.querySelector("div[class^='sidebar_']");
     isMembersVisible = !!document.querySelector("div[class^='members_']");
 }
 
@@ -31,24 +37,21 @@ function showNoSupportModal(name: string = "Vencord") {
     Alerts.show({
         title: "Hold on!",
         body: <>
-            <img src="https://github.com/user-attachments/assets/4a351bfb-a2a1-4693-be2d-d19f18d76684" />
-            <Forms.FormText className={Margins.top8}>You are using VendroidEnhanced, which the {name} Server does not provide support for!</Forms.FormText>
+            <img alt="no-support-image" src="https://github.com/user-attachments/assets/4a351bfb-a2a1-4693-be2d-d19f18d76684" />
+            <BaseText tag="p" size="sm" className={Margins.top8}>
+                You are using VendroidEnhanced, which the {name} Server does not provide support for!
+            </BaseText>
 
-            <Forms.FormText className={Margins.top8}>
-                {name} only provides support for official builds. Therefore, please ask for support in the <Link href="https://discord.gg/qtmpcF56Yf">VendroidEnhanced support server</Link>.
-            </Forms.FormText>
+            <BaseText tag="p" size="sm" className={Margins.top8}>
+                {name} only provides support for official builds.Therefore, please ask for support in the <Link href="https://discord.gg/qtmpcF56Yf"> VendroidEnhanced support server </Link>.
+            </BaseText>
 
-            <Text variant="text-md/bold" className={Margins.top8}>You will be banned from receiving support if you ignore this rule.</Text>
+            <BaseText weight="bold" className={Margins.top8}> You will be banned from receiving support if you ignore this rule.</BaseText>
 
-            <Text variant="text-xs/medium" className={Margins.top8}>You can disable this warning and regain message sending permissions here in the VendroidEnhancements plugin settings.</Text>
+            <BaseText size="xs" weight="medium" className={Margins.top8}> You can disable this warning and regain message sending permissions here in the VendroidEnhancements plugin settings.</BaseText>
         </>,
     });
 }
-
-export let contributors = [];
-const ms = findByPropsLazy("toggleMembersSection");
-const isaw = findByPropsLazy("isAndroidWeb");
-
 
 export default definePlugin({
     name: "VendroidEnhancements",
@@ -58,13 +61,14 @@ export default definePlugin({
     dependencies: ["MessageEventsAPI"],
     patches: [
         {
-            find: "chat input type must be set",
+            find: '"chat input type must be set"',
             replacement: [
                 {
                     match: /(\i.\i.useSetting\(\))&&!\(0,\i.isAndroidWeb\)\(\)/,
                     replace: "$1",
                 },
             ],
+            all: true,
         },
     ],
     prepareSettings() {
@@ -81,7 +85,6 @@ export default definePlugin({
         });
     },
     async start() {
-
         this.prepareSettings();
         // Populate badges
         try {
@@ -92,7 +95,7 @@ export default definePlugin({
             ).json()).contributors;
         } catch { }
 
-        if (!window.VencordMobileNative.getBool("desktopMode", false) && isaw.isAndroidWeb()) {
+        if (!window.VencordMobileNative.getBool("desktopMode", false) && PlatformUtils.isAndroidWeb()) {
             enableStyle("mstyle");
             setInterval(() => {
                 const screenWidth = screen.availWidth;
@@ -139,7 +142,7 @@ export default definePlugin({
                         }
                         else {
                             if (!isMembersVisible) {
-                                ms.toggleMembersSection();
+                                ChannelSidebarActions.toggleMembersSection();
                                 isMembersVisible = true;
                                 isSidebarVisible = false;
                             }
@@ -155,7 +158,7 @@ export default definePlugin({
                             }
                         }
                         if (isMembersVisible) {
-                            ms.toggleMembersSection();
+                            ChannelSidebarActions.toggleMembersSection();
                             isMembersVisible = false;
                             isSidebarVisible = false;
                         }
@@ -178,24 +181,19 @@ export default definePlugin({
         }
     }),
     onBeforeMessageSend(c, msg) {
-        if (
-            [VENCORD_SUPPORT_ID, ABANDONWARE_SUPPORT_ID].includes(c) &&
-            !this.settings.store.allowSupportMessageSending
-        ) {
-            showNoSupportModal("Vencord");
-            msg.content = "";
-        }
-        if (
-            c === EQUICORD_SUPPORT_ID &&
-            !this.settings.store.allowSupportMessageSending
-        ) {
-            showNoSupportModal("Equicord");
-            msg.content = "";
-        }
+        if (this.settings.store.allowSupportMessageSending) return;
+
+        const label = [VENCORD_SUPPORT_ID, ABANDONWARE_SUPPORT_ID].includes(c)
+            ? "Vencord" : c === EQUICORD_SUPPORT_ID ? "Equicord" : null;
+        if (!label) return;
+
+        showNoSupportModal(label);
+        msg.content = "";
     },
     userProfileBadge: {
+        id: "vendroid_enhanced_contributor_badge",
         description: "VendroidEnhanced Contributor",
-        image: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/f8d6485aadde73599eca60c53ddf8a5769ec1293/ic_launcher-playstore.png",
+        iconSrc: "https://raw.githubusercontent.com/VendroidEnhanced/random-files/f8d6485aadde73599eca60c53ddf8a5769ec1293/ic_launcher-playstore.png",
         position: 0,
         props: {
             style: {
@@ -203,7 +201,6 @@ export default definePlugin({
                 transform: "scale(0.9)", // The image is a bit too big compared to default badges
             },
         },
-        // @ts-expect-error
         shouldShow: ({ userId }) => contributors.map(c => c.id || 0).includes(userId),
         link: "https://github.com/nin0-dev/VendroidEnhanced",
     },
