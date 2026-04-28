@@ -1,22 +1,20 @@
 /* eslint-disable simple-header/header */
 
 import { SettingsTab as STab } from "@components/settings/tabs/BaseTab";
-import { Forms } from "@webpack/common";
 
+import { cl } from "../../utils";
 import { generateOptions } from "../generateOptions";
 import { settings } from "../settings";
 
 export function SettingsTab() {
     return (
-        <STab title="VendroidEnhanced Settings">
+        <STab>
             {Object.entries(settings).map(([section, sectionSettings]) => {
                 return <>
-                    <div style={{ marginTop: "20px", width: "100%" }} />
-                    <Forms.FormSection title={section}>
-                        {
-                            generateOptions(sectionSettings)
-                        }
-                    </Forms.FormSection>
+                    <div className={cl("settings-tab")} />
+                    <section title={section}>
+                        {generateOptions(sectionSettings)}
+                    </section>
                 </>;
             })}
         </STab>

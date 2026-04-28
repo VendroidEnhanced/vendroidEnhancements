@@ -10,7 +10,7 @@ export function generateOptions(settings: {
     [key: string]: Setting;
 }) {
     return Object.entries(settings).map(([key, setting]) => {
-        switch(setting.type) {
+        switch (setting.type) {
             case "toggle": {
                 return <ToggleSetting id={key} setting={setting} />;
             }

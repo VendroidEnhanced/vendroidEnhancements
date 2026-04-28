@@ -1,42 +1,51 @@
 /* eslint-disable simple-header/header */
 
+import { BaseText } from "@components/BaseText";
+import { Button } from "@components/Button";
 import { Link } from "@components/Link";
 import { Margins } from "@utils/margins";
-import { Alerts, Button, Forms, Toasts } from "@webpack/common";
+import { Alerts, Toasts } from "@webpack/common";
 
 import { cl } from "../../utils";
+import { Author } from "../types";
 
-const AppIconButton = ({ id, name, url, author }: { id: string; name: string; url: string; author?: { url: string; name: string; }; }) => <Button color={Button.Colors.TRANSPARENT} onClick={() => {
-    Alerts.show({
-        title: "Change app icon",
-        body: <>
-            <img src={url} className={cl("icon-preview")} />
-            <Forms.FormText className={Margins.top8}>You are about to change the app icon to the <strong>{name}</strong> icon.</Forms.FormText>
-            {author && <Forms.FormText className={Margins.top8}>This icon was made by <Link href={
-                author.url
-            }>{author.name}</Link>, huge thanks to them.</Forms.FormText>}
-            <Forms.FormText className={Margins.top8}>Would you like to continue?</Forms.FormText>
-        </>,
-        confirmText: "Yes",
-        cancelText: "No",
-        onConfirm: () => {
-            window.VencordMobileNative.changeAppIcon(id);
-            Toasts.show({
-                type: Toasts.Type.SUCCESS,
-                message: "App icon changed",
-                id: Toasts.genId(),
-                options: {
-                    position: Toasts.Position.BOTTOM
-                }
-            });
-        }
-    });
-}}>{name}</Button>;
+const AppIconButton = ({ id, name, url, author }: { id: string; name: string; url: string; author?: { url: string; name: string; }; }) => (
+    <Button variant="secondary" onClick={() => {
+        Alerts.show({
+            title: "Change app icon",
+            body: <>
+                <img alt="app-icon-image" src={url} className={cl("icon-preview")} />
+                <BaseText tag="p" size="sm" className={Margins.top8}>
+                    You are about to change the app icon to the <strong>{name}</strong> icon.
+                </BaseText>
+                {author && <BaseText tag="p" size="sm" className={Margins.top8}>
+                    This icon was made by <Link href={author.url}>{author.name}</Link>, huge thanks to them.
+                </BaseText>}
+                <BaseText tag="p" size="sm" className={Margins.top8}>
+                    Would you like to continue?
+                </BaseText>
+            </>,
+            confirmText: "Yes",
+            cancelText: "No",
+            onConfirm: () => {
+                window.VencordMobileNative.changeAppIcon(id);
+                Toasts.show({
+                    type: Toasts.Type.SUCCESS,
+                    message: "App icon changed",
+                    id: Toasts.genId(),
+                    options: {
+                        position: Toasts.Position.BOTTOM
+                    }
+                });
+            }
+        });
+    }}>
+        {name}
+    </Button>
+);
 
 const icons: {
-    id: string; name: string; author?: {
-        name: string; url: string;
-    }; url: string;
+    id: string; name: string; author?: Author; url: string;
 }[] = [
         {
             id: "Main",

@@ -17,3 +17,34 @@
     border-radius: 100px;
     margin-bottom: 20px;
 }
+
+.vde-component-setting-title,
+.vde-select-setting-title,
+.vde-string-setting-title {
+    color: var(--header-primary);
+    margin-bottom: 8px;
+}
+
+.vde-component-setting-description,
+.vde-select-setting-description,
+.vde-string-setting-description {
+    margin-bottom: 10px;
+}
+
+.vde-divider-setting {
+    width: 100%;
+    height: 1px;
+    border-top: thin solid var(--background-modifier-accent);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.vde-settings-tab {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.vde-updater-tab-app-updates,
+.vde-updater-tab-vencord-updates {
+    margin-bottom: 3px;
+}
