@@ -9,7 +9,6 @@ import { BaseText } from "@components/BaseText";
 import { UpdaterIcon, VesktopSettingsIcon } from "@components/Icons";
 import { Link } from "@components/Link";
 import { wrapTab } from "@components/settings/tabs/BaseTab";
-import { Contributor } from "@equicordplugins/themeLibrary/types";
 import type SettingsPlugin from "@plugins/_core/settings";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
@@ -21,7 +20,7 @@ import { UpdaterTab } from "./components/UpdaterTab";
 import { SettingsTab } from "./settings/components/SettingsTab";
 import { ABANDONWARE_SUPPORT_ID, EQUICORD_SUPPORT_ID, VENCORD_SUPPORT_ID } from "./utils";
 
-export let contributors: Contributor[] = [];
+export let contributors: any[] = [];
 const ChannelSidebarActions = findByPropsLazy("toggleMembersSection");
 const PlatformUtils = findByPropsLazy("isAndroidWeb");
 
